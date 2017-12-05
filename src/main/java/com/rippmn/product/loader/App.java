@@ -49,11 +49,11 @@ public class App {
 
 	}
 
-	private static Product createProduct(JsonParser parser) throws IOException {
+	private static ParsedProduct createProduct(JsonParser parser) throws IOException {
 
 		JsonToken token = parser.nextToken();
 
-		Product product = new Product();
+		ParsedProduct parsedProduct = new ParsedProduct();
 
 		// now loop thru tokens to find product info
 		while (!JsonToken.END_OBJECT.equals(token)) {
@@ -64,7 +64,7 @@ public class App {
 					
 					if(JsonToken.START_OBJECT.equals(token)) {
 						category = new Category();
-						product.getCategories().add(category);
+						parsedProduct.getCategories().add(category);
 					}
 					
 					if (token.name().startsWith("VALUE")) {
@@ -86,38 +86,38 @@ public class App {
 				
 				switch (parser.getCurrentName()) {
 				case "sku":
-					product.setSku(text);
+					parsedProduct.setSku(text);
 					break;
 				case "name":
-					product.setName(text);
+					parsedProduct.setName(text);
 					break;
 				case "price":
-					product.setPrice(parser.getDoubleValue());
+					parsedProduct.setPrice(parser.getDoubleValue());
 					break;
 				case "shipping":
 					if(text != null && text.length() >0)
-						product.setShipping(parser.getDoubleValue());
+						parsedProduct.setShipping(parser.getDoubleValue());
 					break;
 				case "upc":
-					product.setUpc(text);
+					parsedProduct.setUpc(text);
 					break;
 				case "description":
-					product.setDescription(text);
+					parsedProduct.setDescription(text);
 					break;
 				case "manufacturer":
-					product.setManufacturer(text);
+					parsedProduct.setManufacturer(text);
 					break;
 				case "model":
-					product.setModel(text);
+					parsedProduct.setModel(text);
 					break;
 				case "url":
-					product.setUrl(text);
+					parsedProduct.setUrl(text);
 					break;
 				case "image":
-					product.setImage(text);
+					parsedProduct.setImage(text);
 					break;
 				case "type":
-					product.setType(text);
+					parsedProduct.setType(text);
 					break;
 				default:
 					break;
@@ -128,6 +128,6 @@ public class App {
 			token = parser.nextToken();
 		}
 				
-		return product;
+		return parsedProduct;
 	}
 }

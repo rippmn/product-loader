@@ -3,7 +3,7 @@ package com.rippmn.product.loader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Product {
+public class ParsedProduct {
 	private String sku;
 	private String name;
 	private String type;
