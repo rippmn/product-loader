@@ -67,24 +67,49 @@ public class App {
 			} else if (token.name().startsWith("VALUE")) {
 				// System.out.println(token.name() + "-" + parser.getCurrentName() + "-" +
 				
+				String text = parser.getText();
+				
+				System.out.println(text);
+				
 				switch (parser.getCurrentName()) {
 				case "sku":
-					product.setSku(parser.getText());
+					product.setSku(text);
 					break;
 				case "name":
-					product.setName(parser.getText());
+					product.setName(text);
 					break;
-
+				case "price":
+					product.setPrice(parser.getDoubleValue());
+					break;
+				case "shipping":
+					if(text != null && text.length() >0)
+						product.setShipping(parser.getDoubleValue());
+					break;
+				case "upc":
+					product.setUpc(text);
+					break;
+				case "description":
+					product.setDescription(text);
+					break;
+				case "manufacturer":
+					product.setManufacturer(text);
+					break;
+				case "model":
+					product.setModel(text);
+					break;
+				case "url":
+					product.setUrl(text);
+					break;
+				case "image":
+					product.setImage(text);
+					break;
+				case "type":
+					product.setType(text);
+					break;
 				default:
 					break;
 				}
 				
-//				if (parser.getCurrentName().equals("sku")) {
-//					product.setSku(parser.getText());
-//				} else if (parser.getCurrentName().equals("name")) {
-//					product.setName(parser.getText());
-//				}
-
 			}
 
 			token = parser.nextToken();
