@@ -66,11 +66,24 @@ public class App {
 				}
 			} else if (token.name().startsWith("VALUE")) {
 				// System.out.println(token.name() + "-" + parser.getCurrentName() + "-" +
-				if (parser.getCurrentName().equals("sku")) {
+				
+				switch (parser.getCurrentName()) {
+				case "sku":
 					product.setSku(parser.getText());
-				} else if (parser.getCurrentName().equals("name")) {
+					break;
+				case "name":
 					product.setName(parser.getText());
+					break;
+
+				default:
+					break;
 				}
+				
+//				if (parser.getCurrentName().equals("sku")) {
+//					product.setSku(parser.getText());
+//				} else if (parser.getCurrentName().equals("name")) {
+//					product.setName(parser.getText());
+//				}
 
 			}
 
