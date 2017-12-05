@@ -1,4 +1,4 @@
-package com.rippmn.product;
+package com.rippmn.product.loader;
 
 public class Product {
 	private String sku;
