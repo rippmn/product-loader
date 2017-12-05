@@ -40,7 +40,6 @@ public class App {
 			} else if (JsonToken.START_OBJECT.equals(token)) {
 				// create the product
 				products++;
-				//System.out.println(token.name());
 				System.out.println(createProduct(parser));
 			}
 
@@ -60,9 +59,14 @@ public class App {
 		while (!JsonToken.END_OBJECT.equals(token)) {
 
 			if (JsonToken.START_ARRAY.equals(token) && parser.getCurrentName().equals("category") ) {
-				//System.out.println(parser.getCurrentName());
-				Category category = new Category();
+				Category category = null;
 				while (!JsonToken.END_ARRAY.equals(token)) {
+					
+					if(JsonToken.START_OBJECT.equals(token)) {
+						category = new Category();
+						product.getCategories().add(category);
+					}
+					
 					if (token.name().startsWith("VALUE")) {
 						String text = parser.getText();
 						switch (parser.getCurrentName()) {
@@ -77,7 +81,6 @@ public class App {
 					}
 					token = parser.nextToken();
 				}
-				product.getCategories().add(category);
 			} else if (token.name().startsWith("VALUE")) {
 				String text = parser.getText();
 				
