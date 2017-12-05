@@ -1,4 +1,4 @@
-package com.rippmn.product_parser;
+package com.rippmn.product;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

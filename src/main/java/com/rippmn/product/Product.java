@@ -1,4 +1,4 @@
-package com.rippmn.product_parser;
+package com.rippmn.product;
 
 public class Product {
 	private String sku;
