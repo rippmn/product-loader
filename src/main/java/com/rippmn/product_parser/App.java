@@ -10,7 +10,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 
 /**
- * Hello world!
+ * load products json and create product objects
  *
  */
 public class App {
@@ -18,6 +18,7 @@ public class App {
 
 		URL url = new URL("file:///home/rippmn/Downloads/products-batteries.json");
 		//URL url = new URL("file:///home/rippmn/Downloads/products.json");
+		//URL url = new URL("https://raw.githubusercontent.com/BestBuyAPIs/open-data-set/master/products.json");
 
 		// get an instance of the json parser from the json factory
 		JsonFactory factory = new JsonFactory();
