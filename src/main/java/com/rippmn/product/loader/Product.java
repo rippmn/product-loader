@@ -1,5 +1,8 @@
 package com.rippmn.product.loader;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Product {
 	private String sku;
 	private String name;
@@ -12,6 +15,7 @@ public class Product {
 	private String model;
 	private String url;
 	private String image;
+	private List<Category> categories = new ArrayList<Category>();
 	
 	
 	public String getSku() {
@@ -81,13 +85,43 @@ public class Product {
 	public void setImage(String image) {
 		this.image = image;
 	}
+	
+	public List<Category> getCategories() {
+		return categories;
+	}
+	public void setCategories(List<Category> categories) {
+		this.categories = categories;
+	}
 	@Override
 	public String toString() {
 		return "Product [sku=" + sku + ", name=" + name + ", type=" + type + ", price=" + price + ", upc=" + upc
 				+ ", description=" + description + ", shipping=" + shipping + ", manufacturer=" + manufacturer
-				+ ", model=" + model + ", url=" + url + ", image=" + image + "]";
+				+ ", model=" + model + ", url=" + url + ", image=" + image + ", categories=" + categories + "]";
 	}
 	
+	
+	
+}
+
+class Category{
+	private String id;
+	private String name;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	@Override
+	public String toString() {
+		return "Category [id=" + id + ", name=" + name + "]";
+	}
 	
 	
 }

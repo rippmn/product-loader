@@ -40,7 +40,7 @@ public class App {
 			} else if (JsonToken.START_OBJECT.equals(token)) {
 				// create the product
 				products++;
-				System.out.println(token.name());
+				//System.out.println(token.name());
 				System.out.println(createProduct(parser));
 			}
 
@@ -59,17 +59,27 @@ public class App {
 		// now loop thru tokens to find product info
 		while (!JsonToken.END_OBJECT.equals(token)) {
 
-			if (JsonToken.START_ARRAY.equals(token)) {
+			if (JsonToken.START_ARRAY.equals(token) && parser.getCurrentName().equals("category") ) {
 				//System.out.println(parser.getCurrentName());
+				Category category = new Category();
 				while (!JsonToken.END_ARRAY.equals(token)) {
+					if (token.name().startsWith("VALUE")) {
+						String text = parser.getText();
+						switch (parser.getCurrentName()) {
+						case "id":
+							category.setId(text);
+							break;
+						case "name":
+							category.setName(text);
+						default:
+							break;
+						}
+					}
 					token = parser.nextToken();
 				}
+				product.getCategories().add(category);
 			} else if (token.name().startsWith("VALUE")) {
-				// System.out.println(token.name() + "-" + parser.getCurrentName() + "-" +
-				
 				String text = parser.getText();
-				
-				System.out.println(text);
 				
 				switch (parser.getCurrentName()) {
 				case "sku":
@@ -114,7 +124,7 @@ public class App {
 
 			token = parser.nextToken();
 		}
-
+				
 		return product;
 	}
 }
