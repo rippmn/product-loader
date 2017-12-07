@@ -3,6 +3,8 @@ package com.rippmn.product.loader;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -27,6 +29,9 @@ public class App {
 		JsonToken token;
 		int products = 0;
 
+		ArrayList<ParsedProduct> parsedProds = new ArrayList<ParsedProduct>();
+		
+		
 		while (!parser.isClosed()) {
 			token = parser.nextToken();
 
@@ -40,13 +45,32 @@ public class App {
 			} else if (JsonToken.START_OBJECT.equals(token)) {
 				// create the product
 				products++;
-				System.out.println(createProduct(parser));
+				parsedProds.add(createProduct(parser));
+				System.out.println(parsedProds.get(parsedProds.size()-1));
 			}
 
 		}
 
 		System.out.println(products);
-
+		
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("{");
+		
+		Iterator<ParsedProduct> prodIter = parsedProds.iterator();
+		
+		while(prodIter.hasNext()) {
+			ParsedProduct prod = prodIter.next();
+			sb.append("{\"").append(prod.getSku()).append("\",\"").append(prod.getName()).append("\"}");
+			if(prodIter.hasNext()) {
+				sb.append(",");
+			}
+		}
+		
+		sb.append("}");
+		
+		System.out.println(sb);
+		
 	}
 
 	private static ParsedProduct createProduct(JsonParser parser) throws IOException {
