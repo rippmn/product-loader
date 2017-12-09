@@ -102,7 +102,7 @@ public class DataLoader {
 					parsedProduct.setSku(text);
 					break;
 				case "name":
-					parsedProduct.setName(text.toLowerCase());
+					parsedProduct.setName(text);
 					break;
 				case "price":
 					parsedProduct.setPrice(parser.getDoubleValue());

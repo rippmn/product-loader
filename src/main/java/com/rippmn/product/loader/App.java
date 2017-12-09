@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.StringTokenizer;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -19,8 +19,9 @@ public class App {
 	public static void main(String[] args) throws JsonParseException, MalformedURLException, IOException {
 
 		URL url = new URL("file:///home/rippmn/Downloads/products-batteries.json");
-		//URL url = new URL("file:///home/rippmn/Downloads/products.json");
-		//URL url = new URL("https://raw.githubusercontent.com/BestBuyAPIs/open-data-set/master/products.json");
+		// URL url = new URL("file:///home/rippmn/Downloads/products.json");
+		// URL url = new
+		// URL("https://raw.githubusercontent.com/BestBuyAPIs/open-data-set/master/products.json");
 
 		// get an instance of the json parser from the json factory
 		JsonFactory factory = new JsonFactory();
@@ -30,8 +31,7 @@ public class App {
 		int products = 0;
 
 		ArrayList<ParsedProduct> parsedProds = new ArrayList<ParsedProduct>();
-		
-		
+
 		while (!parser.isClosed()) {
 			token = parser.nextToken();
 
@@ -46,31 +46,79 @@ public class App {
 				// create the product
 				products++;
 				parsedProds.add(createProduct(parser));
-				System.out.println(parsedProds.get(parsedProds.size()-1));
+				System.out.println(parsedProds.get(parsedProds.size() - 1));
 			}
 
 		}
 
 		System.out.println(products);
-		
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append("{");
-		
-		Iterator<ParsedProduct> prodIter = parsedProds.iterator();
-		
-		while(prodIter.hasNext()) {
-			ParsedProduct prod = prodIter.next();
-			sb.append("{\"").append(prod.getSku()).append("\",\"").append(prod.getName()).append("\"}");
-			if(prodIter.hasNext()) {
-				sb.append(",");
+
+		// StringBuilder sb = new StringBuilder();
+
+		// sb.append("{");
+
+		// Iterator<ParsedProduct> prodIter = parsedProds.iterator();
+
+		for (ParsedProduct p : parsedProds) {
+
+			StringTokenizer st = new StringTokenizer(p.getName());
+
+			String lastToken = null;
+			String phrase = null;
+			while (st.hasMoreTokens()) {
+
+				if (phrase == null) {
+					phrase = st.nextToken();
+					lastToken = st.nextToken();
+
+				}
+
+				while (lastToken.length() == 1) {
+					System.out.println("****" + lastToken.charAt(0));
+					if (!Character.isLetterOrDigit(lastToken.charAt(0))) {
+						lastToken = st.nextToken();
+						System.out.println("****" + lastToken);
+					} else {
+						break;
+					}
+				}
+
+				System.out.println(phrase.concat(" ").concat(lastToken));
+				phrase = lastToken;
+				if (st.hasMoreTokens()) {
+					lastToken = st.nextToken();
+				}
+			}
+
+			if (!phrase.contains(lastToken)) {
+				System.out.println(phrase.concat(" ").concat(lastToken));
+				System.out.println(lastToken);
+			}else if (phrase.equals(lastToken)) {
+				System.out.println(lastToken);
 			}
 		}
-		
-		sb.append("}");
-		
-		System.out.println(sb);
-		
+
+		// while(prodIter.hasNext()) {
+		// ParsedProduct prod = prodIter.next();
+		// sb.append("{\"").append(prod.getSku()).append("\",\"").append(prod.getName()).append("\"}");
+		// if(prodIter.hasNext()) {
+		// sb.append(",");
+		// }
+		// }
+		//
+		// sb.append("}");
+		//
+		// System.out.println(sb);
+
+		// ArrayList<String> strings = new ArrayList<String>();
+		//
+		// for(int i=1;i<10;i++) {
+		// strings.add(Integer.toString(i));
+		// }
+		//
+		// varargs(strings.get(0), strings.get(1), strings.subList(2,
+		// strings.size()).toArray(new String[strings.size()-2]));
+
 	}
 
 	private static ParsedProduct createProduct(JsonParser parser) throws IOException {
@@ -82,15 +130,15 @@ public class App {
 		// now loop thru tokens to find product info
 		while (!JsonToken.END_OBJECT.equals(token)) {
 
-			if (JsonToken.START_ARRAY.equals(token) && parser.getCurrentName().equals("category") ) {
+			if (JsonToken.START_ARRAY.equals(token) && parser.getCurrentName().equals("category")) {
 				Category category = null;
 				while (!JsonToken.END_ARRAY.equals(token)) {
-					
-					if(JsonToken.START_OBJECT.equals(token)) {
+
+					if (JsonToken.START_OBJECT.equals(token)) {
 						category = new Category();
 						parsedProduct.getCategories().add(category);
 					}
-					
+
 					if (token.name().startsWith("VALUE")) {
 						String text = parser.getText();
 						switch (parser.getCurrentName()) {
@@ -107,7 +155,7 @@ public class App {
 				}
 			} else if (token.name().startsWith("VALUE")) {
 				String text = parser.getText();
-				
+
 				switch (parser.getCurrentName()) {
 				case "sku":
 					parsedProduct.setSku(text);
@@ -119,7 +167,7 @@ public class App {
 					parsedProduct.setPrice(parser.getDoubleValue());
 					break;
 				case "shipping":
-					if(text != null && text.length() >0)
+					if (text != null && text.length() > 0)
 						parsedProduct.setShipping(parser.getDoubleValue());
 					break;
 				case "upc":
@@ -146,12 +194,18 @@ public class App {
 				default:
 					break;
 				}
-				
+
 			}
 
 			token = parser.nextToken();
 		}
-				
+
 		return parsedProduct;
+	}
+
+	private static void varargs(String s1, String s2, String... strings) {
+		for (String s : strings) {
+			System.err.println(s);
+		}
 	}
 }
